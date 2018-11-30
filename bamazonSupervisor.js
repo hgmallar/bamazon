@@ -46,7 +46,7 @@ function createNewDept() {
                 over_head_costs: inquirerResponse.deptCosts
             },
             function (err, result) {
-                console.log(result.affectedRows + " product inserted!\n");
+                console.log(result.affectedRows + " department inserted!\n");
                 connection.end();
             }
         );
@@ -95,19 +95,53 @@ function productSalesByDept() {
 
 }
 
-//ask the user what they would like to do 
-inquirer.prompt([
-    {
-        type: "list",
-        message: "What would you like to do?",
-        name: "command",
-        choices: ["View Product Sales by Department", "Create New Department"]
-    }
-]).then(function (inquirerResponse) {
-    if (inquirerResponse.command === "View Product Sales by Department") {
-        productSalesByDept();
-    }
-    else if (inquirerResponse.command === "Create New Department") {
-        createNewDept();
-    }
-});
+function printProductsTable() {
+    connection.query("select * from products", function (err, res) {
+        if (err) { throw err }
+        else {
+            //print all of the items in the products table of the bamazon database
+            console.log("----------------------------------");
+            for (var i = 0; i < res.length; i++) {
+                console.log("ID: " + res[i].item_id + " || Name: " + res[i].product_name + " || Department: " + res[i].department_name + " || Price: " + res[i].price + " || Quantity: " + res[i].stock_quantity + " || Sales: " + res[i].product_sales);
+            }
+        }
+    });
+}
+
+function printDeparmentsTable() {
+    connection.query("select * from departments", function (err, res) {
+        if (err) { throw err }
+        else {
+            //print all of the items in the departments table of the bamazon database
+            console.log("----------------------------------");
+            for (var i = 0; i < res.length; i++) {
+                console.log("ID: " + res[i].department_id + " || Name: " + res[i].department_name + " || Costs: " + res[i].over_head_costs);
+            }
+            console.log("----------------------------------");
+        }
+    });
+}
+
+function menu() {
+    //ask the user what they would like to do 
+    inquirer.prompt([
+        {
+            type: "list",
+            message: "What would you like to do?",
+            name: "command",
+            choices: ["View Product Sales by Department", "Create New Department"]
+        }
+    ]).then(function (inquirerResponse) {
+        if (inquirerResponse.command === "View Product Sales by Department") {
+            printProductsTable();
+            printDeparmentsTable();
+            productSalesByDept();
+        }
+        else if (inquirerResponse.command === "Create New Department") {
+            createNewDept();
+        }
+    });
+}
+
+menu();
+

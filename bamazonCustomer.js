@@ -55,7 +55,7 @@ connection.connect(function (err) {
         else {
             //print all of the items in the products table of the bamazon database
             for (var i = 0; i < res.length; i++) {
-                console.log("ID: " + res[i].item_id + " || Name: " + res[i].product_name + " || Department: " + res[i].department_name + " || Price: " + res[i].price + " || Quantity: " + res[i].stock_quantity);
+                console.log("ID: " + res[i].item_id + " || Name: " + res[i].product_name + " || Department: " + res[i].department_name + " || Price: " + res[i].price + " || Quantity: " + res[i].stock_quantity + " || Sales: " + res[i].product_sales);
             }
             //ask the customer what they what id they would like to buy and how much
             inquirer.prompt([
